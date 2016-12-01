@@ -38,52 +38,27 @@ def best_hand(hand):
     return strongest
 
 
-def best_wild_hand(hand):
-    # """Try all values for jokers in all 5-card selections.
-    #
-    # ?B can be S or C, ?R can be H or D
-    # what is the problem seems to be,
-    #
-    # how to choose the best card?
-    # how to handle ? as a number and how to assign the num to maximize the hand
-    #
-    # hint:
-    # simulate the range of possibilities of wild card"""
-    hands = set(best_hand(h) for h in itertools.product(*map(replacements, hand)))
-    return max(hands, key=hand_rank)
-
-
 def replacements(card):
     """Return a list of the possible replacements for a card
     there will be more than 1 only for wild cards"""
-    if card == '?B' : return blackcards
-    elif card == '?R' : return  redcards
+    if card == '?B':
+        return blackcards
+    elif card == '?R':
+        return redcards
     else: return [card]
 
-wildhand = "TD TC 5H 5C 7C ?R ?B".split()
 
-best_wild_hand(wildhand)
+def best_wild_hand(hand):
+    """Try all values for jokers in all 5-card selections."""
+    debug1 = itertools.product(*map(replacements,hand))
 
-
-def test_best_wild_hand():
-    assert (sorted(best_wild_hand("6C 7C 8C 9C TC 5C ?B".split()))
-            == ['7C', '8C', '9C', 'JC', 'TC'])
-    assert (sorted(best_wild_hand("TD TC 5H 5C 7C ?R ?B".split()))
-            == ['7C', 'TC', 'TD', 'TH', 'TS'])
-    assert (sorted(best_wild_hand("JD TC TH 7C 7D 7S 7H".split()))
-            == ['7C', '7D', '7H', '7S', 'JD'])
-    return 'test_best_wild_hand passes'
-
-
-# ------------------
-# Provided Functions
-#
-# You may want to use some of the functions which
-# you have already defined in the unit to write
-# your best_hand function.
+    print (debug1)
+    hands = set(best_hand(h) for h in itertools.product(*map(replacements, hand)))
+    debug2 = max(hands, key=hand_rank)
+    return debug2
 
 def hand_rank(hand):
-    "Return a value indicating the ranking of a hand."
+    """Return a value indicating the ranking of a hand."""
     ranks = card_ranks(hand)
     if straight(ranks) and flush(hand):
         return (8, max(ranks))
@@ -142,3 +117,15 @@ def two_pair(ranks):
         return (pair, lowpair)
     else:
         return None
+
+
+def test_best_wild_hand():
+    assert (sorted(best_wild_hand("6C 7C 8C 9C TC 5C ?B".split()))
+            == ['7C', '8C', '9C', 'JC', 'TC'])
+    assert (sorted(best_wild_hand("TD TC 5H 5C 7C ?R ?B".split()))
+            == ['7C', 'TC', 'TD', 'TH', 'TS'])
+    assert (sorted(best_wild_hand("JD TC TH 7C 7D 7S 7H".split()))
+            == ['7C', '7D', '7H', '7S', 'JD'])
+    return 'test_best_wild_hand passes'
+
+print  (test_best_wild_hand())
