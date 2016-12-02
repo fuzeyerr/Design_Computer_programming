@@ -42,14 +42,6 @@ def best_hand(hand):
     return strongest
 
 
-
-# ------------------
-# Provided Functions
-#
-# You may want to use some of the functions which
-# you have already defined in the unit to write
-# your best_hand function.
-
 def hand_rank(hand):
     "Return a value indicating the ranking of a hand."
     ranks = card_ranks(hand)
