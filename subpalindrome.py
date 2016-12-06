@@ -15,6 +15,8 @@
 #
 # Please do not use regular expressions to solve this quiz!
 
+import Recstring
+
 def longest_subpalindrome_slice(text):
     """Return (i, j) such that text[i:j] is the longest palindrome in text."""
     # Your code here
@@ -54,9 +56,26 @@ def check_palindrome(str):
         return True
 
 
+def longest_subpalindrome_slice1(text):
+    """Return (i, j) such that text[i:j] is the longest palindrome in text."""
+    if text == '': return (0,0)
+    def length(slice): a, b = slice; return b-a
+    candidate = [grow(text, start, end)
+                 for start in range(len(text))
+                 for end in (start, start+1)]
+    return max(candidate, key=length)
+
+
+def grow(text, start, end):
+    """ Start with a 0- or 1- length palindrome; try to grow a bigger one. """
+    while (start > 0 and end < len(text)
+           and text[start-1].upper() == text[end].upper()):
+        start -= 1; end += 1
+    return (start, end)
+
 
 def test():
-    L = longest_subpalindrome_slice
+    L = longest_subpalindrome_slice1
     assert L('something rac e car going') == (8, 21)
     assert L('racecar') == (0, 7)
     assert L('Racecar') == (0, 7)
@@ -69,3 +88,8 @@ def test():
 
 
 print test()
+Rectext = Recstring.RecString('RacecarX')
+longest_subpalindrome_slice1(Rectext)
+
+# print Rectext.get_recording_link(Rectext)
+
